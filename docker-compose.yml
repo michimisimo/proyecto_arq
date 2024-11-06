@@ -1,0 +1,166 @@
+services:
+  load-balancer:
+    image: nginx
+    ports:
+      - "3020:3020" # Exponer el puerto 80 para las solicitudes entrantes
+    depends_on:
+      - service-gest-dest-a
+      - service-gest-dest-b
+      - service-gest-cam-a
+      - service-gest-cam-b
+      - service-gest-dif-a
+      - service-gest-dif-b
+      - service-env-email-a
+      - service-env-email-b
+      - service-reportes-a
+      - service-reportes-b
+
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Configuración de NGINX
+    networks:
+      - app-network
+
+  #scheduler
+  scheduler:
+    build:
+      context: ./scheduler
+    ports:
+      - "3021:3021"
+    networks:
+      - app-network
+
+  # Servicios de Server A
+  service-gest-dest-a:
+    build:
+      context: ./server-A/service-gest-dest
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  service-gest-cam-a:
+    build:
+      context: ./server-A/service-gest-cam
+    ports:
+      - "3001:3001"
+    networks:
+      - app-network
+
+  service-gest-dif-a:
+    build:
+      context: ./server-A/service-gest-dif
+    ports:
+      - "3002:3002"
+    networks:
+      - app-network
+
+  service-env-email-a:
+    build:
+      context: ./server-A/service-env-email
+    ports:
+      - "3003:3003"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    entrypoint:
+      - "dockerize"
+      - "-wait"
+      - "tcp://rabbitmq:5672"
+      - "-timeout"
+      - "60s"
+      - "node"
+      - "server.js"
+    networks:
+      - app-network
+
+  service-reportes-a:
+    build:
+      context: ./server-A/service-reportes
+    ports:
+      - "3004:3004"
+    networks:
+      - app-network
+
+  # Servicios de Server B
+  service-gest-dest-b:
+    build:
+      context: ./server-B/service-gest-dest
+    ports:
+      - "3010:3010"
+    networks:
+      - app-network
+
+  service-gest-cam-b:
+    build:
+      context: ./server-B/service-gest-cam
+    ports:
+      - "3011:3011"
+    networks:
+      - app-network
+
+  service-gest-dif-b:
+    build:
+      context: ./server-B/service-gest-dif
+    ports:
+      - "3012:3012"
+    networks:
+      - app-network
+
+  service-env-email-b:
+    build:
+      context: ./server-B/service-env-email
+    ports:
+      - "3013:3013"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    entrypoint:
+      - "dockerize"
+      - "-wait"
+      - "tcp://rabbitmq:5672"
+      - "-timeout"
+      - "60s"
+      - "node"
+      - "server.js"
+    networks:
+      - app-network
+
+  service-reportes-b:
+    build:
+      context: ./server-B/service-reportes
+    ports:
+      - "3014:3014"
+    networks:
+      - app-network
+
+  #rabbitMQ
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app-network
+
+  #pagina web
+  web-mensajeria-masiva:
+    image: nginx
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web-mensajeria-masiva/dist/proyecto_arq/browser:/usr/share/nginx/html:ro
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:

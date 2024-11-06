@@ -1,0 +1,152 @@
+.page {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+/* Estilos para la tabla de campañas */
+.cont {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.cont h4{
+    font-family: poppins-light;
+    color: #f1e64e;
+    font-size: 30px;
+
+}
+
+.cont h3{
+    font-family: poppins-regular;
+    margin-top: 0;
+}
+
+.cont .nav_table {
+    margin-left: auto;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 50px;
+}
+
+.nav_table button {
+    align-self: center;
+    width: 180px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid #f1e64e;
+    background-color: black;
+    transition: 0.3s;
+}
+
+.nav_table button:hover {
+    cursor: pointer;
+    color: black;
+    background-color: #f1e64e;
+    transition: 0.3s;
+}
+
+.table-container {
+    border: 1px solid #f1e64e;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+thead {
+    border-bottom: 1px solid #f1e64e;
+}
+
+thead tr th {
+    background-color: #0c0c0c;
+    font-family: poppins-medium;
+    color: #f1e64e;
+    font-size: 15px;
+    padding: 10px;    
+    text-align: center;
+}
+
+tbody td {
+    font-family: poppins-regular;
+    font-size: 13px;
+    padding: 10px;
+    border-bottom: 1px solid #f1e64e;
+}
+
+tbody tr td{
+    text-align: center;
+}
+
+/* Fila par (even) */
+tbody tr:nth-child(even) {
+    background-color: #363636;
+    transition: 0.3s;
+}
+
+/* Fila impar (odd) */
+tbody tr:nth-child(odd) {
+    background-color: #0c0c0c;
+    transition: 0.3s;
+}
+
+/* Estilo para la fila seleccionada */
+tbody tr:hover {
+    background-color: #f1e64e;
+    color: black;
+    transition: 0.3s;
+}
+
+table th,
+table td {
+    text-align: left;
+}
+
+/* iconos */
+td button {
+    margin: 0 5px;
+    height: 30px;
+    width: 30px; 
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+td button i {
+    font-size: 16px; 
+    color: #f1e64e;
+}
+
+tbody tr:hover {
+    background-color: #f1e64e;
+    color: black; 
+}
+
+tbody tr:hover td button i {
+    color: black; 
+}
+
+.icono-estado{
+    display: inline-block;
+    color: white;
+    border-radius: 3px;
+    padding: 4px;
+    margin-left: 8px;
+}
+
+#icono-file{
+    font-size: 25px; 
+}

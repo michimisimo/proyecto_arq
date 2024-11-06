@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<div class="page">
+    <div class="top-elements">
+        <h3 class="report-title">Reporte {{reporte.nombre_campana | titlecase }}</h3>
+        <br>        
+        <div class="email-info">
+            <h4 class="email-title">Mensaje de la campaña</h4>
+            <div class="email-details">
+                <p><strong>De:</strong> {{ reporte.remitente }}</p>
+                <p><strong>Asunto:</strong> {{ reporte.asunto }}</p>
+                <p class="email-content">{{ reporte.contenido }}</p>
+            </div>
+        </div>        
+        <div class="info-container">
+            <div class="info-item">
+                <span class="info-label">Tipo de campaña: </span>
+                <span class="info-value">{{ tipoCampana === 1 ? 'SMS' : ((tipoCampana === 2 ? 'Email' : '-')) | titlecase }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Fecha de envío: </span>
+                <span class="info-value">{{reporte.fecha_envio | date: 'dd/MM/yyyy'}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Fecha de programación: </span>
+                <span class="info-value">{{reporte.fecha_programada | date: 'dd/MM/yyyy'}}</span>
+            </div>            
+            <div class="info-item">
+                <span class="info-label">Cantidad de Enviados: </span>
+                <span class="info-value">{{reporte.correos_enviados}}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Hora de programación: </span>
+                <span class="info-value">{{ reporte.hora_programada.slice(0, -3) }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Cantidad de Fallidos: </span>
+                <span class="info-value">{{reporte.correos_fallidos}}</span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="cont">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rut</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let destinatario of listaDest">
+                        <td>{{formatRut(destinatario.rut) }}-{{ destinatario.dvrut | titlecase}}</td>
+                        <td>
+                            {{ destinatario.nombre | titlecase }}
+                            {{ destinatario.snombre | titlecase}}
+                            {{ destinatario.appaterno | titlecase}}
+                            {{ destinatario.apmaterno | titlecase }}
+                        </td>
+                        <td class="email-container">{{ destinatario.email }}</td>
+                        <td>
+                            <ng-container *ngIf="getEnvioDestinatario(destinatario.rut) as envio">
+                                <span *ngIf="envio.id_estado === 2">
+                                    Enviado <i class="fas fa-check"></i>
+                                </span>
+                                <span *ngIf="envio.id_estado === 3">
+                                    Fallido <i class="fas fa-times"></i>
+                                </span>
+                                <span *ngIf="envio.id_estado !== 2 && envio.id_estado !== 3">
+                                    -
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="!getEnvioDestinatario(destinatario.rut)">                                 
+                                -
+                            </ng-container>
+                        </td>
+                    </tr>                    
+                    <tr *ngIf="!listaDest.length">
+                        <td colspan="4" class="no-data-row">No hay destinatarios disponibles.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

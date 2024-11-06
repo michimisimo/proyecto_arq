@@ -1,0 +1,16 @@
+const express = require('express');
+const cors = require('cors');
+const usuarioRoutes = require('./routes/campanaRoutes');
+
+const app = express();
+const port = 3011;
+
+app.use(cors());
+app.use(express.json());
+
+// Usar las rutas
+app.use('/api/cam', usuarioRoutes);
+
+app.listen(port, () => {
+    console.log(`API running on port ${port}`);
+});

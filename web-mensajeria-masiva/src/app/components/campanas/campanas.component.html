@@ -1,0 +1,152 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<div class="page">
+    <div class="cont">        
+        <div class="nav_table">
+            <h3>Campañas programadas</h3>
+            <button class="upload" (click)="openCreateModal()">+ Nueva Campaña</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo campaña</th>
+                        <th>Fecha creación</th>
+                        <th>Fecha programada</th>
+                        <th>Hora programada</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let campana of listCam; let i = index">
+                        <td>{{ campana.nombre | titlecase}}</td>
+                        <td>  {{ campana.id_tipo_campana === 1 ? 'SMS' : ((campana.id_tipo_campana === 2 ? 'Email' : '-')) | titlecase }}</td>
+                        <td>{{ campana.fecha_creacion | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{ campana.fecha_programada | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{ campana.hora_programada}}</td>
+                        <td>
+                            <button *ngIf="campana.id_campana" (click)="selDataDif(campana)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button (click)="openEditModal(campana)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button (click)="eliminarCampana(campana)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>                            
+                        </td> 
+                    </tr>
+                    <tr *ngIf="listCam.length === 0">
+                        <td colspan="6">No hay campañas creadas</td>
+                    </tr>
+                </tbody>
+            </table>            
+        </div>
+        <br>
+        <br>
+        <h3>Campañas en proceso</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo campaña</th>
+                        <th>Fecha creación</th>
+                        <th>Fecha programada</th>
+                        <th>Hora programada</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let campana of listCamInProgress; let i = index">
+                        <td>{{ campana.nombre | titlecase}}</td>
+                        <td>  {{ campana.id_tipo_campana === 1 ? 'SMS' : ((campana.id_tipo_campana === 2 ? 'Email' : '-')) | titlecase }}</td>
+                        <td>{{ campana.fecha_creacion | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{ campana.fecha_programada | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{ campana.hora_programada}}</td>
+                        <td>
+                            En proceso
+                            <span class="icono-estado">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="listCamInProgress.length === 0">
+                        <td colspan="6">No hay campañas en proceso</td>
+                    </tr>
+                </tbody>
+            </table>            
+        </div>
+        <br>
+        <br>
+        <h3>Campañas terminadas</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo campaña</th>
+                        <th>Fecha creación</th>
+                        <th>Fecha programada</th>
+                        <th>Hora programada</th>
+                        <th></th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let campana of listCamTerminada; let i = index">
+                        <td>{{ campana.nombre | titlecase}}</td>
+                        <td>  {{ campana.id_tipo_campana === 1 ? 'SMS' : ((campana.id_tipo_campana === 2 ? 'Email' : '-')) | titlecase }}</td>
+                        <td>{{ campana.fecha_creacion | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{ campana.fecha_programada | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{ campana.hora_programada}}</td>
+                        <td>
+                            <button>
+                                <i (click)="irReporte(campana)" id="icono-file" class="fas fa-file-alt"></i>
+                            </button>
+                        </td>
+                        <td>
+                            Terminada 
+                            <span class="icono-estado">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </td>                        
+                    </tr>
+                    <tr *ngIf="listCamTerminada.length === 0">
+                        <td colspan="7">No hay campañas terminadas</td>
+                    </tr>
+                </tbody>
+            </table>            
+        </div>
+    </div>
+
+    
+
+</div>
+
+<!-- Modal para crear campaña -->
+<app-create-campana 
+  *ngIf="isCreateModalOpen" 
+  [campana]="newCampana" 
+  (onCreate)="createCampana($event)" 
+  (onClose)="closeCreateModal()">
+</app-create-campana>
+
+<!-- Modal para editar campaña -->
+<app-edit-campana 
+  *ngIf="isEditModalOpen" 
+  [campana]="selectedCampana" 
+  (onSave)="editarCampana($event)" 
+  (onClose)="closeEditModal()">
+</app-edit-campana>
+
+<!-- Modal para mostrar destinatarios campaña -->
+<app-show-list 
+  *ngIf="isDestinatariosModalOpen" 
+  [isModalOpen]="isDestinatariosModalOpen" 
+  [listDest]="listDest" 
+  [campanaSelected]="idCampanaSelected"
+  [nombreCampana]="nombreCampanaSelected"
+  (onClose)="closeDestinatariosModal()">
+</app-show-list>
