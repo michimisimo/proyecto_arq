@@ -1,0 +1,9 @@
+{
+  "routes": [
+    "/campanas",
+    "/dashboard",
+    "/destinatarios",
+    "/home",
+    "/reportes"
+  ]
+}
