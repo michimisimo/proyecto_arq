@@ -1,6 +1,5 @@
-# Ignorar carpetas node_modules y package-lock en todos los niveles
+# Ignorar carpetas node_modules en todos los niveles
 **/node_modules
-**/package-lock.json
 
 # Ignorar configuraciones locales de editor
 .vscode/
